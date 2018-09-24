@@ -66,7 +66,7 @@ get_macro <- function(type, from = '2016-1-1', to = now()){
 }
 
 # get_stock 用于获取股票数据 ###############################
-get_stock <- function(code, from = '2016-1-1', to = now()){
+    get_stock <- function(code, from = '2016-1-1', to = now()){
   
 }
 # code2name 用于将股票代码转换为公司名称，例如将“600030”或“600030.sh”转换为中信证券#######
