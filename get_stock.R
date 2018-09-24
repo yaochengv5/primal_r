@@ -75,14 +75,34 @@ require(lubridate)
 # get_stock 用于获取股票数据 ###############################
         get_stock <- function(code, from = '2016-1-1', to = now()){
         
-}
-# code2name 用于将股票代码转换为公司名称，例如将“600030”或“600030.sh”转换为中信证券#######
-        code2name <- function(code){
+        }
         
+# sto_name 用于将股票代码转换为公司名称，例如将“600030”或“600030.sh”转换为中信证券#######
+        sto_name <- function(code){
+        ## code: 【字符串】，表示股票代码，只有字符串的前六位数字会被截取
+                
+        # 从data文件夹中获取数据文件
+                sto_name <- read_csv("data/stock_names.csv")
+                
+        # 截取code的前6位
+                code6 <- str_sub(code,1,6)
+                
+        # code前六位是否是数字？
+                if(!str_detect(code6, "\\d{6}")){
+                        print("请确保输入代码的前6位是数字")
+                        return()
+                }
+        # 哪些行匹配？ 
+                good <- str_detect(sto_name[[3]], str_c("^",code6,"$"))
+        
+        # 获取符合条件的股票代码
+                sto_name[[1]][good]
 }
+        
+        
 # sto_code 用于将公司名称转换为代码######
         sto_code <- function(stockname, code_style = "wind", exact = TRUE){
-        ## stockname：【字符串或者字符串形式的正则表达式】， 表示股票的中文名称；
+        ## stockname：【字符串】，表示股票的中文名称；
         ## code_style 【字符串】表示生成的代码类型，共有三种：
         ##      1. pure： 六位数字
         ##      2. wind： wind代码
@@ -100,6 +120,6 @@ require(lubridate)
         else
                 good <- str_detect(sto_name[[1]], stockname) 
         
-        # 获取符合条件的股票代码
+        # 获取符合条件的股票名称
                 sto_name[[str_c(code_style,"_name")]][good]
 }
