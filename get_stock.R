@@ -4,7 +4,8 @@
 require(tidyverse)
 require(stringr)
 require(lubridate)
-
+require(quantmod)
+require(xts)
 
 
 
