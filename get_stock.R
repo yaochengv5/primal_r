@@ -79,24 +79,25 @@ require(WindR)
         
         }
         
-# sto_name 用于将股票代码转换为公司名称，例如将“600030”或“600030.sh”转换为"中信证券"#######
+# sto_name 用于将股票代码转换为公司名称，例如将“600030”或“600030.sh”转换为"中信证券" #######
         sto_name <- function(code){
         ## code: 【字符串】，表示股票代码，只有字符串的前六位数字会被截取
                 
         # 从data文件夹中获取数据文件
-                sto_name <- read_csv("data/stock_names.csv")
+                sto_name <- suppressMessages(read_csv("data/stock_names.csv"))
                 
         # 去掉代码中的“ST”
-                if (str_detect(code, "^[Ss][Tt]"))
-                        code <- str_sub(code,3)
+                ifelse(str_detect(code, "^[Ss][Tt]"),
+                        code <- str_sub(code,3),
+                        NA)
                 
         # 截取code的前6位
                 code6 <- str_sub(code,1,6)
                 
         # code前六位是否是数字？
-                if(!str_detect(code6, "\\d{6}")){
-                        invisible(stop("请确保输入代码的前6位是数字"))
-                }
+                ifelse(!str_detect(code6, "\\d{6}"),
+                        invisible(stop("请确保输入代码的前6位是数字")),
+                        NA)
         # 哪些行匹配？ 
                 good <- str_detect(sto_name[[3]], str_c("^",code6,"$"))
         
@@ -117,7 +118,7 @@ require(WindR)
                 
                 
         # 从data文件夹中获取数据文件
-                sto_name <- read_csv("data/stock_names.csv")
+                sto_name <- suppressMessages(read_csv("data/stock_names.csv"))
                 
         # 哪些行匹配？        
         if(exact==TRUE)
@@ -145,15 +146,17 @@ require(WindR)
         # 如果传入的前6位是数字，则将其转化为股票名称
                 
                 # 去掉代码中的“ST”
-                if (str_detect(stock, "^[Ss][Tt]"))
-                        stock <- str_sub(stock,3)
+                ifelse(str_detect(stock, "^[Ss][Tt]"),
+                        stock <- str_sub(stock,3),
+                        NA)
                 
                 # 截取stock的前6位
                 code6 <- str_sub(stock,1,6)
                 
                 # 如果stock的前6位是代码，则将stock变量转化为中文股票名
-                if (str_detect(code6,"\\d{6}"))
-                stock <- sto_name(code6)
+                ifelse(str_detect(code6,"\\d{6}"),
+                stock <- sto_name(code6),
+                NA)
                 
                 
                 # 获取股票wind代码
